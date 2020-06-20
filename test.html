@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Prevail.js test</title>
+		<style>
+			body				{font-family:sans-serif;}
+			code, result		{display:block;}
+			code				{padding:20px; background:rgb(225,225,225);}
+		</style>
+		<script src="prevail.js"></script>
+	</head>
+	<body>
+		<result>
+		</result>
+		<code>
+		</code>
+
+		<script>
+			let testHTML = `
+				<div>
+					{# All things come here #}
+					<h1>{{ title|upper }}</h1>
+					<h3>{{ subtitle }}</h3>
+					{% if bodyText %}
+					<strong>{{ bodyText }}</strong>
+					{% endif %}
+					<ul>
+						{% for i,el in elements %}
+							<li>({{ i }}) {{ el }}</li>
+						{% endfor %}
+					</ul>
+
+					{% if dict %}
+					This is a key/value list:
+					<ul>
+						{% for key, value in dict %}
+							<li>{{ key }} -> {{ value }}</li>
+						{% endfor %}
+					</ul>
+					{% endif %}
+				</div>`
+
+			//
+
+			const resultEl = document.body.querySelector('result')
+			const codeEl = document.body.querySelector('code')
+
+			// Parsing.
+
+			const context = {
+				title: 'My list',
+				subtitle: 'of useless items',
+				bodyText: 'Only shown if I exist!',
+				foo: 'bar',
+				elements: ['eggs', 'milk', 'butter'],
+				dict: {
+					foo: 'bar',
+					hello: 'world',
+					prevail: 'Rules!',
+				}
+			}
+
+			let template = prevail.parse(testHTML)
+			resultEl.innerHTML = template(context)
+			codeEl.textContent = template(context)
+		</script>
+	</body>
+</html>
